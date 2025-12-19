@@ -18,7 +18,7 @@ export default [
         "eqeqeq": "error",
         "no-console": "warn",
         "semi": ["error", "always"],
-        "quotes": ["error", "single"],
+        "quotes": ["error", "doubles"],
         "indent": ["error", 4],
         "no-trailing-spaces": "error",
         },
