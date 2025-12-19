@@ -1,0 +1,107 @@
+:root {
+
+    --primary-font: "Anton", sans-serif;
+    --secondary-font: "Manrope", sans-serif;
+
+    --yellow: #FFD15B;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box
+}
+
+/* ------ */
+/* Header */
+/* ------ */
+
+header {
+    width: 100%;
+    height: 667px;
+    padding: 50px 70px;
+    background-image: url(../images/landing_page/banner.png);
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+}
+
+header .title {
+    margin-bottom: 150px;
+}
+
+header .title .title_logo {
+    width: 208px;
+    height: 26px;
+}
+
+header .searchbar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+header .searchbar .searchbar_title {
+    font-family: var(--primary-font);
+    color: var(--yellow);
+    font-size: 44px;
+    font-weight: 400;
+    width: 700px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header .searchbar .searchbar_searchbar {
+    width: 955px;
+    height: 72px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+    gap: 10px;
+}
+
+header .searchbar .searchbar_searchbar input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    padding: 0 30px;
+    font-family: var(--secondary-font);
+    font-size: 16px;
+    outline: none;
+}
+
+header .searchbar .searchbar_searchbar .searchbar_search {
+    border: none;
+    background-color: black;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+header .searchbar .searchbar_searchbar .searchbar_search:hover {
+    background-color: var(--yellow);
+}
+
+header .searchbar .searchbar_searchbar .searchbar_search i {
+    color: white;
+}
+
+header .searchbar .searchbar_searchbar .searchbar_search:hover i {
+    color: black;
+}
+
+header .searchbar .searchbar_searchbar .searchbar_empty {
+    border: none;
+    background-color: white;
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+}
