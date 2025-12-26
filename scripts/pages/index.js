@@ -1,9 +1,7 @@
-import { emptySearchbar } from "../utils/emptySearchbar.js";
-import { showEmptyButton } from "../utils/showEmptyButton.js";
+import Searchbar from "../class/Searbar.js"
 
 async function init() {
-    showEmptyButton();
-    emptySearchbar();
+    const mainSearchbar = new Searchbar("mainSearchbar","mainEmptyButton");
 }
 
 init()
