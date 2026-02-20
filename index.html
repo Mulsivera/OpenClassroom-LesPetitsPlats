@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Découvrez Les Petits Plats, une application de recherche de recettes simple et rapide, avec filtres par ingrédients, appareils et ustensiles.">
     <title>Les petits plats - Accueil</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-pZrH9..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-pZrH9..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
 </head>
 
@@ -22,11 +25,63 @@
             <h1 class="searchbar_title">CHERCHEZ PARMI PLUS DE 1500 RECETTES DU QUOTIDIEN,SIMPLES ET DÉLICIEUSES</h1>
             <div class="searchbar_searchbar">
                 <input autocomplete="off" id="mainSearchbar" placeholder="Rechercher une recette, un ingrédient, ...">
-                <button id="mainEmptyButton" class="searchbar_empty"><i class="fa-solid fa-x fa-xl"></i></button>
-                <button class="searchbar_search"><i class="fa-solid fa-magnifying-glass fa-2xl"></i></button>
+                <button aria-label="Vider la barre de recherche" id="mainEmptyButton" class="searchbar_empty"><i
+                        class="fa-solid fa-x fa-xl"></i></button>
+                <button aria-label="Recherche une recette" class="searchbar_search"><i
+                        class="fa-solid fa-magnifying-glass fa-2xl"></i></button>
             </div>
         </div>
     </header>
+    <main>
+        <div class="filters">
+            <div class="ingredients">
+                <p id="ingredients_title" class="ingredients_title">Ingrédients<i class="fa-solid fa-chevron-down fa-sm"></i></p>
+                <div id="ingredients_filter" class="ingredients_filter">
+                    <div class="filter_searchbar">
+                        <input autocomplete="off" id="ingredientsSearchbar">
+                        <button aria-label="Vider la barre de recherche" id="ingredientsEmptyButton"><i class="fa-solid fa-x fa-xs"></i></button>
+                        <button aria-label="Recherche une recette"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <div id="ingredients_selected_filters" class="selected_filters">
+                    </div>
+                    <ul id="ingredients_filters" class="filter_list">
+                    </ul>
+                </div>
+            </div>
+            <div class="appliances">
+                <p id="appliances_title" class="appliances_title">Appareils<i class="fa-solid fa-chevron-down fa-sm"></i></p>
+                <div id="appliances_filter" class="appliances_filter">
+                    <div class="filter_searchbar">
+                        <input autocomplete="off" id="appliancesSearchbar">
+                        <button aria-label="Vider la barre de recherche" id="appliancesEmptyButton"><i class="fa-solid fa-x fa-xs"></i></button>
+                        <button aria-label="Recherche une recette"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <div id="appliances_selected_filters" class="selected_filters">
+                    </div>
+                    <ul id="appliances_filters" class="filter_list">
+                    </ul>
+                </div>
+            </div>
+            <div class="ustensils">
+                <p id="ustensils_title" class="ustensils_title">Ustensiles<i class="fa-solid fa-chevron-down fa-sm"></i></p>
+                <div id="ustensils_filter" class="ustensils_filter">
+                    <div class="filter_searchbar">
+                        <input autocomplete="off" id="ustensilsSearchbar">
+                        <button aria-label="Vider la barre de recherche" id="ustensilsEmptyButton"><i class="fa-solid fa-x fa-xs"></i></button>
+                        <button aria-label="Recherche une recette"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                    <div id="ustensils_selected_filters" class="selected_filters">
+                    </div>
+                    <ul id="ustensils_filters" class="filter_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="global_selected_filters" class="selected">
+        </div>
+        <div id="recipes_list_div" class="recipes">
+        </div>
+    </main>
 </body>
 <script type="module" src="./scripts/pages/index.js"></script>
 </html>

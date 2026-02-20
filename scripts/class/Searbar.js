@@ -1,3 +1,5 @@
+import { recipeSorter } from "../sorter/recipeSorter.js";
+
 export default class Searchbar {
 
     constructor(searchbarId, clearButtonId) {
@@ -5,13 +7,16 @@ export default class Searchbar {
         this.input = document.getElementById(searchbarId);
         this.clearButton = document.getElementById(clearButtonId);
 
-        if(!this.input)
+        if (!this.input)
             throw new Error("script/class/Searchbar.js : Input with " + searchbarId + " id does not exist.");
-        if(!this.clearButton)
+        if (!this.clearButton)
             throw new Error("script/class/Searchbar.js : Button with " + clearButtonId + " id does not exist.");
 
-        this.input.addEventListener("input",() => {this.toggleClearButton();})
-        this.clearButton.addEventListener("click",() => {this.clear();})
+        this.hideClearButton();
+
+        this.input.addEventListener("input", () => { this.toggleClearButton(); })
+        this.input.addEventListener("input", () => { this.toggleResearch(); })
+        this.clearButton.addEventListener("click", () => { this.clear(); })
 
     }
 
@@ -34,6 +39,24 @@ export default class Searchbar {
 
     toggleClearButton() {
         this.getLength() >= 1 ? this.showClearButton() : this.hideClearButton();
+    }
+
+    toggleResearch() {
+        var actual_search = this.input.value
+        if (this.getLength() >= 3) {
+            window.globalData = {
+                ...window.globalData,
+                actual_search,
+            }
+        }
+        else {
+            actual_search = "";
+            window.globalData = {
+                ...window.globalData,
+                actual_search,
+            }
+        }
+        recipeSorter();
     }
 
 }
