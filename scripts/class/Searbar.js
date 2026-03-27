@@ -2,10 +2,11 @@ import { recipeSorter } from "../sorter/recipeSorter.js";
 
 export default class Searchbar {
 
-    constructor(searchbarId, clearButtonId) {
+    constructor(searchbarId, clearButtonId, isMain) {
 
         this.input = document.getElementById(searchbarId);
         this.clearButton = document.getElementById(clearButtonId);
+        this.category = searchbarId.replace("Searchbar", "").toLowerCase();
 
         if (!this.input)
             throw new Error("script/class/Searchbar.js : Input with " + searchbarId + " id does not exist.");
@@ -15,7 +16,15 @@ export default class Searchbar {
         this.hideClearButton();
 
         this.input.addEventListener("input", () => { this.toggleClearButton(); })
-        this.input.addEventListener("input", () => { this.toggleResearch(); })
+        this.input.addEventListener("input", () => {
+            if (isMain) {
+                this.toggleResearch();
+            }
+            else
+            {
+                this.toggleFilterResearch();
+            }
+        });
         this.clearButton.addEventListener("click", () => { this.clear(); })
 
     }
@@ -23,6 +32,12 @@ export default class Searchbar {
     clear() {
         this.input.value = "";
         this.hideClearButton();
+
+        if (this.isMain) {
+            this.toggleResearch();
+        } else {
+            this.toggleFilterResearch();
+        }
     }
 
     getLength() {
@@ -57,6 +72,19 @@ export default class Searchbar {
             }
         }
         recipeSorter();
+    }
+
+    toggleFilterResearch() {
+
+        const key = this.category + "_filter_search";
+
+        window.globalData = {
+            ...window.globalData,
+            [key]: this.input.value.toLowerCase()
+        };
+
+        recipeSorter();
+
     }
 
 }

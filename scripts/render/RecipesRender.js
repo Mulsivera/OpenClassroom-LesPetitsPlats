@@ -2,7 +2,7 @@ import RecipeRender from "./RecipeRender.js";
 
 export default class RecipesRender {
 
-    constructor(containerId,recipeList) {
+    constructor(containerId, recipeList) {
 
         this.container = document.getElementById(containerId);
         this.recipeList = recipeList;
@@ -10,18 +10,17 @@ export default class RecipesRender {
     }
 
     clear() {
-
-        this.container.innerHTML = ""
-
+        this.container.innerHTML = "";
     }
 
     render(TemplateClass) {
 
-        this.clear()
-        for(const recipe of this.recipeList)
-        {
+        this.clear();
+
+        this.recipeList.forEach(recipe => {
             const recipeRender = new RecipeRender();
-            recipeRender.render(this.container,recipe,TemplateClass);
-        }
+            recipeRender.render(this.container, recipe, TemplateClass);
+        });
+
     }
 }

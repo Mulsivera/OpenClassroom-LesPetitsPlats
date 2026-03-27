@@ -52,7 +52,7 @@ export class RecipeCard {
         const recipe_ingredients_box = createDomElement("div", "recipe_ingredients-box", "", "");
         infos_box.append(recipe_ingredients_box);
 
-        for (const ingredient of this.ingredients_list) {
+        this.ingredients_list.forEach(ingredient => {
             const ingredient_box = createDomElement("div", "recipe_ingredient-box", "", "");
 
             const ingredient_name = createDomElement("p", "recipe_ingredient-name", "", ingredient.ingredient);
@@ -63,7 +63,7 @@ export class RecipeCard {
             ingredient_box.append(ingredient_name);
             ingredient_box.append(ingredient_quantity);
             recipe_ingredients_box.append(ingredient_box);
-        }
+        });
 
         return recipe_article;
 

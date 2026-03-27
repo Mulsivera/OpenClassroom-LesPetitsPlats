@@ -3,45 +3,51 @@ import Filter from "../class/Filter.js";
 
 export default function getAllFilters() {
     const ingredients_list = [];
-    const appliance_list = [];
+    const appliances_list = [];
     const ustensils_list = [];
-    for(const recipe of recipes) {
+
+    recipes.forEach(recipe => {
+
         // Get All Ingredients
-        const recipe_ingredients = recipe.ingredients;
-        recipe_ingredients.forEach(ingredient => {
+        recipe.ingredients.forEach(ingredient => {
             if (!ingredients_list.includes(ingredient.ingredient)) {
                 ingredients_list.push(ingredient.ingredient);
             }
         });
+
         // Get All Appliances
-        if(!appliance_list.includes(recipe.appliance))
-        {
-            appliance_list.push(recipe.appliance);
+        if (!appliances_list.includes(recipe.appliance)) {
+            appliances_list.push(recipe.appliance);
         }
-        // Get All Usentils
-        const recipe_ustensils = recipe.ustensils;
-        recipe_ustensils.forEach(ustensil => {
+
+        // Get All Ustensils
+        recipe.ustensils.forEach(ustensil => {
             if (!ustensils_list.includes(ustensil)) {
                 ustensils_list.push(ustensil);
             }
         });
-    }
+
+    });
+
     ingredients_list.sort();
-    ingredients_list.forEach(ingredient => {
-        new Filter(ingredient,"ingredients");
-    })
-    appliance_list.sort();
-    appliance_list.forEach(appliance => {
-        new Filter(appliance,"appliances");
-    })
+    ingredients_list.forEach((ingredient, index) => {
+        new Filter(ingredient, "ingredients", index);
+    });
+
+    appliances_list.sort();
+    appliances_list.forEach((appliance, index) => {
+        new Filter(appliance, "appliances", index);
+    });
+
     ustensils_list.sort();
-    ustensils_list.forEach(ustensil => {
-        new Filter(ustensil,"ustensils");
-    })
+    ustensils_list.forEach((ustensil, index) => {
+        new Filter(ustensil, "ustensils", index);
+    });
+
     window.globalData = {
         ...window.globalData,
         ingredients_list,
-        appliance_list,
+        appliances_list,
         ustensils_list
-    }
+    };
 }

@@ -1,15 +1,17 @@
 import { measures } from "../../data/unit.js";
 
 export default function defineIngredientQuantityText(quantity,unit) {
+    var ingredientText = "";
     if (unit) {
         if (measures.includes((unit).toLowerCase())) {
-            const text= quantity + unit;
+            ingredientText= quantity + unit;
         }
         else {
-            const text = quantity + " " + unit;
+            ingredientText = quantity + " " + unit;
         }
     }
     else {
-        const text= quantity;
+        ingredientText= quantity;
     }
+    return ingredientText;
 }
