@@ -14,7 +14,7 @@ export class RecipeCard {
         this.description = recipe.description;
         this.appliance = recipe.appliance;
         this.ustensils_list = recipe.ustensils;
-        this.image_link = "../../../images/recipes/" + this.image;
+        this.image_link = "/images/recipes/" + this.image;
 
     }
 

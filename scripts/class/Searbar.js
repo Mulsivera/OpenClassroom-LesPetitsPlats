@@ -41,7 +41,7 @@ export default class Searchbar {
     }
 
     getLength() {
-        return this.input.value.length;
+        return this.input.value.trim().length;
     }
 
     showClearButton() {
