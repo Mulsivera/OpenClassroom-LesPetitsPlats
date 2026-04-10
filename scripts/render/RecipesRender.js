@@ -3,10 +3,8 @@ import RecipeRender from "./RecipeRender.js";
 export default class RecipesRender {
 
     constructor(containerId, recipeList) {
-
         this.container = document.getElementById(containerId);
         this.recipeList = recipeList;
-
     }
 
     clear() {
@@ -17,11 +15,10 @@ export default class RecipesRender {
 
         this.clear();
 
-        for (let i = 0; i < this.recipeList.length; i++) {
-            const recipe = this.recipeList[i];
-            const recipeRender = new RecipeRender();
-            recipeRender.render(this.container, recipe, TemplateClass);
-        }
-
+        this.recipeList
+            .forEach(recipe => {
+                new RecipeRender()
+                    .render(this.container, recipe, TemplateClass);
+            });
     }
 }

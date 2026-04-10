@@ -1,9 +1,8 @@
 export default class RecipeRender {
 
-    render(container,recipe,TemplateClass) {
-        
-        const templateInstance = new TemplateClass(recipe);
-        const template = templateInstance.create();
+    render(container, recipe, TemplateClass) {
+
+        const template = new TemplateClass(recipe).create();
         container.append(template);
 
     }

@@ -12,15 +12,7 @@ export default class Searchbar {
         this.hideClearButton();
 
         this.input.addEventListener("input", () => {
-            this.toggleClearButton();
-        });
-
-        this.input.addEventListener("input", () => {
-            if (this.isMain === true) {
-                this.toggleResearch();
-            } else {
-                this.toggleFilterResearch();
-            }
+            this.handleInput();
         });
 
         this.clearButton.addEventListener("click", () => {
@@ -28,65 +20,51 @@ export default class Searchbar {
         });
     }
 
+    handleInput() {
+        this.toggleClearButton();
+        this.isMain ? this.toggleResearch() : this.toggleFilterResearch();
+    }
+
     clear() {
 
         this.input.value = "";
         this.hideClearButton();
 
-        if (this.isMain === true) {
-            this.toggleResearch();
-        } else {
-            this.toggleFilterResearch();
-        }
+        this.isMain ? this.toggleResearch() : this.toggleFilterResearch();
     }
 
-    getLength() {
-        return this.input.value.trim().length;
-    }
+    getLength = () =>
+        this.input.value.trim().length;
 
-    showClearButton() {
+    showClearButton = () =>
         this.clearButton.style.display = "block";
-    }
 
-    hideClearButton() {
+    hideClearButton = () =>
         this.clearButton.style.display = "none";
-    }
 
     toggleClearButton() {
 
-        const length = this.getLength();
+        const shouldShow = this.getLength() >= 1;
 
-        if (length >= 1) {
-            this.showClearButton();
-        } else {
-            this.hideClearButton();
-        }
+        shouldShow ? this.showClearButton() : this.hideClearButton();
     }
 
     toggleResearch() {
 
-        let actual_search = this.input.value;
+        const value = this.input.value;
+        const actual_search = this.getLength() >= 3 ? value : "";
 
-        if (this.getLength() >= 3) {
-            window.globalData = {
-                ...window.globalData,
-                actual_search: actual_search
-            };
-        } else {
-            actual_search = "";
-
-            window.globalData = {
-                ...window.globalData,
-                actual_search: actual_search
-            };
-        }
+        window.globalData = {
+            ...window.globalData,
+            actual_search
+        };
 
         recipeSorter();
     }
 
     toggleFilterResearch() {
 
-        const key = this.category + "_filter_search";
+        const key = `${this.category}_filter_search`;
 
         window.globalData = {
             ...window.globalData,

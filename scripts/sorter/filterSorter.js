@@ -15,261 +15,111 @@ export function filterSorter() {
 
     const actual_search = (window.globalData?.actual_search || "").toLowerCase();
 
-    const showed_ingredients_list = [];
-    const showed_ustensils_list = [];
-    const showed_appliance_list = [];
+    const validRecipes = recipes_list.filter(recipe => {
 
-    for (let i = 0; i < recipes_list.length; i++) {
-
-        const recipe = recipes_list[i];
-
-        const recipe_ingredients = [];
-        for (let j = 0; j < recipe.ingredients.length; j++) {
-            recipe_ingredients.push(recipe.ingredients[j].ingredient.toLowerCase());
-        }
-
-        const recipe_ustensils = [];
-        for (let j = 0; j < recipe.ustensils.length; j++) {
-            recipe_ustensils.push(recipe.ustensils[j].toLowerCase());
-        }
-
+        const recipe_ingredients = recipe.ingredients.map(i => i.ingredient.toLowerCase());
+        const recipe_ustensils = recipe.ustensils.map(u => u.toLowerCase());
         const recipe_appliance = recipe.appliance.toLowerCase();
         const recipe_name = recipe.name.toLowerCase();
         const recipe_description = recipe.description.toLowerCase();
 
-        let as_search = actual_search === "";
+        const as_search =
+            actual_search === "" ||
+            recipe_name.includes(actual_search) ||
+            recipe_description.includes(actual_search) ||
+            recipe_appliance.includes(actual_search) ||
+            recipe_ingredients.some(i => i.includes(actual_search)) ||
+            recipe_ustensils.some(u => u.includes(actual_search));
 
-        if (!as_search) {
-            if (
-                recipe_name.includes(actual_search) ||
-                recipe_description.includes(actual_search) ||
-                recipe_appliance.includes(actual_search)
-            ) {
-                as_search = true;
-            } else {
-                for (let j = 0; j < recipe_ingredients.length; j++) {
-                    if (recipe_ingredients[j].includes(actual_search)) {
-                        as_search = true;
-                        break;
-                    }
-                }
+        const as_ingredients =
+            selected_ingredients_list.length === 0 ||
+            selected_ingredients_list.every(sel =>
+                recipe_ingredients.some(r => r.includes(sel.toLowerCase()))
+            );
 
-                if (!as_search) {
-                    for (let j = 0; j < recipe_ustensils.length; j++) {
-                        if (recipe_ustensils[j].includes(actual_search)) {
-                            as_search = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        const as_ustensils =
+            selected_ustensils_list.length === 0 ||
+            selected_ustensils_list.every(sel =>
+                recipe_ustensils.some(r => r.includes(sel.toLowerCase()))
+            );
 
-        let as_ingredients = true;
+        const as_appliances =
+            selected_appliances_list.length === 0 ||
+            selected_appliances_list.some(sel =>
+                recipe_appliance.includes(sel.toLowerCase())
+            );
 
-        if (selected_ingredients_list.length > 0) {
-            for (let s = 0; s < selected_ingredients_list.length; s++) {
-                const sel = selected_ingredients_list[s].toLowerCase();
-                let found = false;
+        return as_search && as_ingredients && as_ustensils && as_appliances;
+    });
 
-                for (let j = 0; j < recipe_ingredients.length; j++) {
-                    if (recipe_ingredients[j].includes(sel)) {
-                        found = true;
-                        break;
-                    }
-                }
+    const showed_ingredients_list = [
+        ...new Set(
+            validRecipes.flatMap(r =>
+                r.ingredients.map(i => i.ingredient.toLowerCase())
+            )
+        )
+    ];
 
-                if (!found) {
-                    as_ingredients = false;
-                    break;
-                }
-            }
-        }
+    const showed_ustensils_list = [
+        ...new Set(
+            validRecipes.flatMap(r =>
+                r.ustensils.map(u => u.toLowerCase())
+            )
+        )
+    ];
 
-        let as_ustensils = true;
+    const showed_appliance_list = [
+        ...new Set(
+            validRecipes.map(r => r.appliance.toLowerCase())
+        )
+    ];
 
-        if (selected_ustensils_list.length > 0) {
-            for (let s = 0; s < selected_ustensils_list.length; s++) {
-                const sel = selected_ustensils_list[s].toLowerCase();
-                let found = false;
+    const updateDisplay = (list, prefix, selectedList, search, shownList) => {
 
-                for (let j = 0; j < recipe_ustensils.length; j++) {
-                    if (recipe_ustensils[j].includes(sel)) {
-                        found = true;
-                        break;
-                    }
-                }
+        list.forEach((item, index) => {
 
-                if (!found) {
-                    as_ustensils = false;
-                    break;
-                }
-            }
-        }
+            const el = document.getElementById(`${prefix}_${index}_filter`);
+            if (!el) return;
 
-        let as_appliances = true;
+            const isSelected = selectedList
+                .map(s => s.toLowerCase())
+                .includes(item.toLowerCase());
 
-        if (selected_appliances_list.length > 0) {
-            as_appliances = false;
+            if (isSelected) return;
 
-            for (let s = 0; s < selected_appliances_list.length; s++) {
-                const sel = selected_appliances_list[s].toLowerCase();
+            const matchesRecipes = shownList
+                .some(x => x.includes(item.toLowerCase()));
 
-                if (recipe_appliance.includes(sel)) {
-                    as_appliances = true;
-                    break;
-                }
-            }
-        }
+            const matchesSearch = item
+                .toLowerCase()
+                .includes(search);
 
-        if (as_search && as_ingredients && as_ustensils && as_appliances) {
+            el.style.display =
+                matchesRecipes && matchesSearch ? "block" : "none";
+        });
+    };
 
-            for (let j = 0; j < recipe_ingredients.length; j++) {
-                const ingredient = recipe_ingredients[j];
+    updateDisplay(
+        ingredient_list,
+        "ingredients",
+        selected_ingredients_list,
+        ingredient_filter_search,
+        showed_ingredients_list
+    );
 
-                let exists = false;
-                for (let k = 0; k < showed_ingredients_list.length; k++) {
-                    if (showed_ingredients_list[k] === ingredient) {
-                        exists = true;
-                        break;
-                    }
-                }
+    updateDisplay(
+        ustensil_list,
+        "ustensils",
+        selected_ustensils_list,
+        ustensil_filter_search,
+        showed_ustensils_list
+    );
 
-                if (!exists) {
-                    showed_ingredients_list.push(ingredient);
-                }
-            }
-
-            for (let j = 0; j < recipe_ustensils.length; j++) {
-                const ustensil = recipe_ustensils[j];
-
-                let exists = false;
-                for (let k = 0; k < showed_ustensils_list.length; k++) {
-                    if (showed_ustensils_list[k] === ustensil) {
-                        exists = true;
-                        break;
-                    }
-                }
-
-                if (!exists) {
-                    showed_ustensils_list.push(ustensil);
-                }
-            }
-
-            let existsAppliance = false;
-
-            for (let k = 0; k < showed_appliance_list.length; k++) {
-                if (showed_appliance_list[k] === recipe_appliance) {
-                    existsAppliance = true;
-                    break;
-                }
-            }
-
-            if (!existsAppliance) {
-                showed_appliance_list.push(recipe_appliance);
-            }
-        }
-    }
-
-    for (let i = 0; i < ingredient_list.length; i++) {
-
-        const ingredient = ingredient_list[i];
-        const el = document.getElementById("ingredients_" + i + "_filter");
-
-        if (el) {
-
-            let isSelected = false;
-
-            for (let j = 0; j < selected_ingredients_list.length; j++) {
-                if (selected_ingredients_list[j].toLowerCase() === ingredient.toLowerCase()) {
-                    isSelected = true;
-                    break;
-                }
-            }
-
-            if (!isSelected) {
-
-                let matchesRecipes = false;
-
-                for (let j = 0; j < showed_ingredients_list.length; j++) {
-                    if (showed_ingredients_list[j].includes(ingredient.toLowerCase())) {
-                        matchesRecipes = true;
-                        break;
-                    }
-                }
-
-                const matchesSearch = ingredient.toLowerCase().includes(ingredient_filter_search);
-
-                el.style.display = (matchesRecipes && matchesSearch) ? "block" : "none";
-            }
-        }
-    }
-
-    for (let i = 0; i < ustensil_list.length; i++) {
-
-        const ustensil = ustensil_list[i];
-        const el = document.getElementById("ustensils_" + i + "_filter");
-
-        if (el) {
-
-            let isSelected = false;
-
-            for (let j = 0; j < selected_ustensils_list.length; j++) {
-                if (selected_ustensils_list[j].toLowerCase() === ustensil.toLowerCase()) {
-                    isSelected = true;
-                    break;
-                }
-            }
-
-            if (!isSelected) {
-
-                let matchesRecipes = false;
-
-                for (let j = 0; j < showed_ustensils_list.length; j++) {
-                    if (showed_ustensils_list[j].includes(ustensil.toLowerCase())) {
-                        matchesRecipes = true;
-                        break;
-                    }
-                }
-
-                const matchesSearch = ustensil.toLowerCase().includes(ustensil_filter_search);
-
-                el.style.display = (matchesRecipes && matchesSearch) ? "block" : "none";
-            }
-        }
-    }
-
-    for (let i = 0; i < appliance_list.length; i++) {
-
-        const appliance = appliance_list[i];
-        const el = document.getElementById("appliances_" + i + "_filter");
-
-        if (el) {
-
-            let isSelected = false;
-
-            for (let j = 0; j < selected_appliances_list.length; j++) {
-                if (selected_appliances_list[j].toLowerCase() === appliance.toLowerCase()) {
-                    isSelected = true;
-                    break;
-                }
-            }
-
-            if (!isSelected) {
-
-                let matchesRecipes = false;
-
-                for (let j = 0; j < showed_appliance_list.length; j++) {
-                    if (showed_appliance_list[j].includes(appliance.toLowerCase())) {
-                        matchesRecipes = true;
-                        break;
-                    }
-                }
-
-                const matchesSearch = appliance.toLowerCase().includes(appliance_filter_search);
-
-                el.style.display = (matchesRecipes && matchesSearch) ? "block" : "none";
-            }
-        }
-    }
+    updateDisplay(
+        appliance_list,
+        "appliances",
+        selected_appliances_list,
+        appliance_filter_search,
+        showed_appliance_list
+    );
 }

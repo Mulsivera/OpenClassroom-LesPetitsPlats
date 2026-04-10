@@ -3,76 +3,39 @@ import Filter from "../class/Filter.js";
 
 export default function getAllFilters() {
 
-    const ingredients_list = [];
-    const appliances_list = [];
-    const ustensils_list = [];
+    const ingredients_list = [
+        ...new Set(
+            recipes.flatMap(r =>
+                r.ingredients.map(i => i.ingredient)
+            )
+        )
+    ].sort();
 
-    for (let i = 0; i < recipes.length; i++) {
+    const appliances_list = [
+        ...new Set(
+            recipes.map(r => r.appliance)
+        )
+    ].sort();
 
-        const recipe = recipes[i];
+    const ustensils_list = [
+        ...new Set(
+            recipes.flatMap(r =>
+                r.ustensils
+            )
+        )
+    ].sort();
 
-        for (let j = 0; j < recipe.ingredients.length; j++) {
-            const ingredient = recipe.ingredients[j].ingredient;
+    ingredients_list.forEach((ingredient, index) => {
+        new Filter(ingredient, "ingredients", index);
+    });
 
-            let exists = false;
+    appliances_list.forEach((appliance, index) => {
+        new Filter(appliance, "appliances", index);
+    });
 
-            for (let k = 0; k < ingredients_list.length; k++) {
-                if (ingredients_list[k] === ingredient) {
-                    exists = true;
-                    break;
-                }
-            }
-
-            if (!exists) {
-                ingredients_list.push(ingredient);
-            }
-        }
-
-        let applianceExists = false;
-
-        for (let k = 0; k < appliances_list.length; k++) {
-            if (appliances_list[k] === recipe.appliance) {
-                applianceExists = true;
-                break;
-            }
-        }
-
-        if (!applianceExists) {
-            appliances_list.push(recipe.appliance);
-        }
-
-        for (let j = 0; j < recipe.ustensils.length; j++) {
-            const ustensil = recipe.ustensils[j];
-
-            let exists = false;
-
-            for (let k = 0; k < ustensils_list.length; k++) {
-                if (ustensils_list[k] === ustensil) {
-                    exists = true;
-                    break;
-                }
-            }
-
-            if (!exists) {
-                ustensils_list.push(ustensil);
-            }
-        }
-    }
-
-    for (let i = 0; i < ingredients_list.length; i++) {
-        ingredients_list.sort();
-        new Filter(ingredients_list[i], "ingredients", i);
-    }
-
-    for (let i = 0; i < appliances_list.length; i++) {
-        appliances_list.sort();
-        new Filter(appliances_list[i], "appliances", i);
-    }
-
-    for (let i = 0; i < ustensils_list.length; i++) {
-        ustensils_list.sort();
-        new Filter(ustensils_list[i], "ustensils", i);
-    }
+    ustensils_list.forEach((ustensil, index) => {
+        new Filter(ustensil, "ustensils", index);
+    });
 
     window.globalData = {
         ...window.globalData,

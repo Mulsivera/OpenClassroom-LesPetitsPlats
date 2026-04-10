@@ -15,7 +15,6 @@ export class RecipeCard {
         this.appliance = recipe.appliance;
         this.ustensils_list = recipe.ustensils;
         this.image_link = "/images/recipes/" + this.image;
-
     }
 
     create() {
@@ -33,35 +32,47 @@ export class RecipeCard {
         recipe_article.append(infos_box);
 
         const recipe_title = createDomElement("p", "recipe_title", "", this.name);
-        infos_box.append(recipe_title);
-
         const recipe_description_title = createDomElement("p", "recipe_description-title", "", "RECETTE");
         const recipe_description = createDomElement("p", "recipe_description", "", this.description);
+
+        infos_box.append(recipe_title);
         infos_box.append(recipe_description_title);
         infos_box.append(recipe_description);
 
         const recipe_ingredients_title = createDomElement("p", "recipe_ingredients-title", "", "INGRÉDIENTS");
-        infos_box.append(recipe_ingredients_title);
-
         const recipe_ingredients_box = createDomElement("div", "recipe_ingredients-box", "", "");
+
+        infos_box.append(recipe_ingredients_title);
         infos_box.append(recipe_ingredients_box);
 
-        for (let i = 0; i < this.ingredients_list.length; i++) {
+        this.ingredients_list
+            .map(ingredient => {
 
-            const ingredient = this.ingredients_list[i];
+                const ingredient_box = createDomElement("div", "recipe_ingredient-box", "", "");
 
-            const ingredient_box = createDomElement("div", "recipe_ingredient-box", "", "");
+                const ingredient_name = createDomElement(
+                    "p",
+                    "recipe_ingredient-name",
+                    "",
+                    ingredient.ingredient
+                );
 
-            const ingredient_name = createDomElement("p", "recipe_ingredient-name", "", ingredient.ingredient);
+                const ingredient_quantity_text =
+                    defineIngredientQuantityText(ingredient.quantity, ingredient.unit);
 
-            const ingredient_quantity_text = defineIngredientQuantityText(ingredient.quantity, ingredient.unit);
-            const ingredient_quantity = createDomElement("p", "recipe_ingredient-quantity", "", ingredient_quantity_text);
+                const ingredient_quantity = createDomElement(
+                    "p",
+                    "recipe_ingredient-quantity",
+                    "",
+                    ingredient_quantity_text
+                );
 
-            ingredient_box.append(ingredient_name);
-            ingredient_box.append(ingredient_quantity);
+                ingredient_box.append(ingredient_name);
+                ingredient_box.append(ingredient_quantity);
 
-            recipe_ingredients_box.append(ingredient_box);
-        }
+                return ingredient_box;
+            })
+            .forEach(el => recipe_ingredients_box.append(el));
 
         return recipe_article;
     }
