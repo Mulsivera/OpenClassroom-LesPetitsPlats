@@ -8,10 +8,11 @@ export default class RecipeData {
         const selected_recipes_list = [];
         const recipes_list = [];
 
-        recipes.forEach(recipe => {
+        for (let i = 0; i < recipes.length; i++) {
+            const recipe = recipes[i];
             selected_recipes_list.push(recipe.id);
             recipes_list.push(recipe);
-        });
+        }
 
         window.globalData = {
             ...window.globalData,
@@ -24,7 +25,15 @@ export default class RecipeData {
 
     getOne(recipe_id) {
 
-        const recipe = recipes.find(r => r.id === recipe_id);
+        let recipe = null;
+
+        for (let i = 0; i < recipes.length; i++) {
+            if (recipes[i].id === recipe_id) {
+                recipe = recipes[i];
+                break;
+            }
+        }
+
         return [recipe];
 
     }

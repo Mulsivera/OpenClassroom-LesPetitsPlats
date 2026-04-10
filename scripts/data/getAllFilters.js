@@ -2,47 +2,77 @@ import { recipes } from "../../data/recipes.js";
 import Filter from "../class/Filter.js";
 
 export default function getAllFilters() {
+
     const ingredients_list = [];
     const appliances_list = [];
     const ustensils_list = [];
 
-    recipes.forEach(recipe => {
+    for (let i = 0; i < recipes.length; i++) {
 
-        // Get All Ingredients
-        recipe.ingredients.forEach(ingredient => {
-            if (!ingredients_list.includes(ingredient.ingredient)) {
-                ingredients_list.push(ingredient.ingredient);
+        const recipe = recipes[i];
+
+        for (let j = 0; j < recipe.ingredients.length; j++) {
+            const ingredient = recipe.ingredients[j].ingredient;
+
+            let exists = false;
+
+            for (let k = 0; k < ingredients_list.length; k++) {
+                if (ingredients_list[k] === ingredient) {
+                    exists = true;
+                    break;
+                }
             }
-        });
 
-        // Get All Appliances
-        if (!appliances_list.includes(recipe.appliance)) {
+            if (!exists) {
+                ingredients_list.push(ingredient);
+            }
+        }
+
+        let applianceExists = false;
+
+        for (let k = 0; k < appliances_list.length; k++) {
+            if (appliances_list[k] === recipe.appliance) {
+                applianceExists = true;
+                break;
+            }
+        }
+
+        if (!applianceExists) {
             appliances_list.push(recipe.appliance);
         }
 
-        // Get All Ustensils
-        recipe.ustensils.forEach(ustensil => {
-            if (!ustensils_list.includes(ustensil)) {
+        for (let j = 0; j < recipe.ustensils.length; j++) {
+            const ustensil = recipe.ustensils[j];
+
+            let exists = false;
+
+            for (let k = 0; k < ustensils_list.length; k++) {
+                if (ustensils_list[k] === ustensil) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
                 ustensils_list.push(ustensil);
             }
-        });
+        }
+    }
 
-    });
+    for (let i = 0; i < ingredients_list.length; i++) {
+        ingredients_list.sort();
+        new Filter(ingredients_list[i], "ingredients", i);
+    }
 
-    ingredients_list.sort();
-    ingredients_list.forEach((ingredient, index) => {
-        new Filter(ingredient, "ingredients", index);
-    });
+    for (let i = 0; i < appliances_list.length; i++) {
+        appliances_list.sort();
+        new Filter(appliances_list[i], "appliances", i);
+    }
 
-    appliances_list.sort();
-    appliances_list.forEach((appliance, index) => {
-        new Filter(appliance, "appliances", index);
-    });
-
-    ustensils_list.sort();
-    ustensils_list.forEach((ustensil, index) => {
-        new Filter(ustensil, "ustensils", index);
-    });
+    for (let i = 0; i < ustensils_list.length; i++) {
+        ustensils_list.sort();
+        new Filter(ustensils_list[i], "ustensils", i);
+    }
 
     window.globalData = {
         ...window.globalData,

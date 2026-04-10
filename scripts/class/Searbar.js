@@ -7,33 +7,33 @@ export default class Searchbar {
         this.input = document.getElementById(searchbarId);
         this.clearButton = document.getElementById(clearButtonId);
         this.category = searchbarId.replace("Searchbar", "").toLowerCase();
-
-        if (!this.input)
-            throw new Error("script/class/Searchbar.js : Input with " + searchbarId + " id does not exist.");
-        if (!this.clearButton)
-            throw new Error("script/class/Searchbar.js : Button with " + clearButtonId + " id does not exist.");
+        this.isMain = isMain;
 
         this.hideClearButton();
 
-        this.input.addEventListener("input", () => { this.toggleClearButton(); })
         this.input.addEventListener("input", () => {
-            if (isMain) {
+            this.toggleClearButton();
+        });
+
+        this.input.addEventListener("input", () => {
+            if (this.isMain === true) {
                 this.toggleResearch();
-            }
-            else
-            {
+            } else {
                 this.toggleFilterResearch();
             }
         });
-        this.clearButton.addEventListener("click", () => { this.clear(); })
 
+        this.clearButton.addEventListener("click", () => {
+            this.clear();
+        });
     }
 
     clear() {
+
         this.input.value = "";
         this.hideClearButton();
 
-        if (this.isMain) {
+        if (this.isMain === true) {
             this.toggleResearch();
         } else {
             this.toggleFilterResearch();
@@ -53,24 +53,34 @@ export default class Searchbar {
     }
 
     toggleClearButton() {
-        this.getLength() >= 1 ? this.showClearButton() : this.hideClearButton();
+
+        const length = this.getLength();
+
+        if (length >= 1) {
+            this.showClearButton();
+        } else {
+            this.hideClearButton();
+        }
     }
 
     toggleResearch() {
-        var actual_search = this.input.value
+
+        let actual_search = this.input.value;
+
         if (this.getLength() >= 3) {
             window.globalData = {
                 ...window.globalData,
-                actual_search,
-            }
-        }
-        else {
+                actual_search: actual_search
+            };
+        } else {
             actual_search = "";
+
             window.globalData = {
                 ...window.globalData,
-                actual_search,
-            }
+                actual_search: actual_search
+            };
         }
+
         recipeSorter();
     }
 
@@ -84,8 +94,5 @@ export default class Searchbar {
         };
 
         recipeSorter();
-
     }
-
 }
-

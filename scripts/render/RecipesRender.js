@@ -17,10 +17,11 @@ export default class RecipesRender {
 
         this.clear();
 
-        this.recipeList.forEach(recipe => {
+        for (let i = 0; i < this.recipeList.length; i++) {
+            const recipe = this.recipeList[i];
             const recipeRender = new RecipeRender();
             recipeRender.render(this.container, recipe, TemplateClass);
-        });
+        }
 
     }
 }
