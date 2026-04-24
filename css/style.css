@@ -334,7 +334,7 @@ main {
     font-family: var(--secondary-font);
     color: var(--grey);
     font-weight: bold;
-    letter-spacing: 9%;
+    letter-spacing: 0.09em;
     margin-bottom: 15px;
 }
 
@@ -358,7 +358,7 @@ main {
 .recipes .recipe_article .recipe_ingredient-name, .recipes .recipe_article .recipe_ingredient-quantity {
     font-size: 12px;
     font-family: var(--secondary-font);
-    font-weight: medium;
+    font-weight: 500;
 }
 
 .recipes .recipe_article .recipe_ingredient-quantity {
